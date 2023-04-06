@@ -64,3 +64,46 @@ function createEntity($pdo)
         }
     }
 }
+
+// function to register a user
+function register($firstName, $lastName, $email, $password)
+{
+    $erreur = null;
+    $user = getUserWithEmail($email);
+
+    if (isset($user)) {
+        echo 'Deja';
+        exit;
+    } else {
+        echo 'ok';
+        exit;
+    }
+
+    // if (strlen($pseudo) >= 8) {
+
+    //     if (strlen($password) >= 8) {
+    //         $hash = password_hash($password, PASSWORD_DEFAULT);
+    //         $data = json_decode(file_get_contents('data.json'), true);
+    //         $user = [
+    //             'pseudo' => $pseudo,
+    //             'password' => $hash,
+    //         ];
+    //         $data[] = $user;
+    //         file_put_contents('data.json', json_encode($data));
+    //         mkdir('./dropbox/' . $pseudo, 0777, true);
+    //         header('Location: connexion.php?registered=' . true);
+    //         exit();
+    //     } else {
+    //         $erreur = "Mot de passe trop court ! (8 min)";
+    //     }
+    // } else {
+    //     $erreur = "Pseudo trop court ! (8 min)";
+    // }
+
+    return $erreur;
+}
+
+
+function getUserWithEmail($email)
+{
+}
