@@ -12,9 +12,6 @@ $pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
 
 $erreur = login($pdo);
 
-if ($erreur) {
-    echo $erreur;
-}
 $page = new WebPage("Connexion");
 
 $page->appendToHead('<link rel="stylesheet" href="connexion.css">');

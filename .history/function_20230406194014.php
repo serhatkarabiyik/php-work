@@ -92,17 +92,23 @@ function login($pdo)
         $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
         $user = getUser($email, $pdo);
         // verfier que l'email existe 
-        if (isset($user["email"])) {
-            $dbPassword = $user["password"];
-            if (password_verify($password, $dbPassword)) {
-                header('Location: acceuil.php');
-                exit();
-            } else {
-                $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
-            }
+        if (isset(getUser($email, $pdo)["email"])){
+            $dbPassword = ;
+        }
+            // si oui 
+            // récupère le mot de passe de la base de données
+            // si non 
+            //  erreur
+
+            $dbPassword = "";
+
+        // var_dump()
+        if (password_verify($password, $dbPassword)) {
+            header('Location: pageUser.php');
+            exit();
         } else {
-            $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
+            $erreur = "Erreur : nom d'utilisateur ou mot de passe incorrect";
         }
     }
-    return $erreur;
+    return [$erreur];
 }

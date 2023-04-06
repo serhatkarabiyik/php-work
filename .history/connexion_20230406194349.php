@@ -10,11 +10,8 @@ require_once('function.php');
 
 $pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
 
-$erreur = login($pdo);
+login($pdo);
 
-if ($erreur) {
-    echo $erreur;
-}
 $page = new WebPage("Connexion");
 
 $page->appendToHead('<link rel="stylesheet" href="connexion.css">');

@@ -103,6 +103,9 @@ function login($pdo)
         } else {
             $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
         }
+
+        // var_dump()
+
     }
-    return $erreur;
+    return [$erreur];
 }

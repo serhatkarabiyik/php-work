@@ -94,15 +94,16 @@ function login($pdo)
         // verfier que l'email existe 
         if (isset($user["email"])) {
             $dbPassword = $user["password"];
-            if (password_verify($password, $dbPassword)) {
-                header('Location: acceuil.php');
-                exit();
-            } else {
-                $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
-            }
+        } else {
+            $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
+        }
+
+        // var_dump()
+        if (password_verify($password, $dbPassword)) {
+            header('Location: acceuil.php');
+            exit();
         } else {
             $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
         }
     }
-    return $erreur;
 }

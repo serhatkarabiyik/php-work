@@ -66,23 +66,7 @@ function createEntity($pdo)
 }
 
 
-function getUser($email, $pdo)
-{
-
-    $stmt = $pdo->prepare(<<<SQL
-        SELECT * from user
-        where email = :email
-    SQL);
-
-    $stmt->execute([
-        ":email" => $email
-    ]);
-
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result;
-}
-
-function login($pdo)
+function login()
 {
     $erreur = null;
     $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
@@ -90,19 +74,22 @@ function login($pdo)
     if ($methode == "POST") {
         $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS);
         $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
-        $user = getUser($email, $pdo);
+
         // verfier que l'email existe 
-        if (isset($user["email"])) {
-            $dbPassword = $user["password"];
-            if (password_verify($password, $dbPassword)) {
-                header('Location: acceuil.php');
-                exit();
-            } else {
-                $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
-            }
+        // si oui 
+        // récupère le mot de passe de la base de données
+        // si non 
+        //  erreur
+
+        $dbPassword = "";
+
+        // var_dump()
+        if (password_verify($password, $dbPassword)) {
+            header('Location: pageUser.php');
+            exit();
         } else {
-            $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
+            $erreur = "Erreur : nom d'utilisateur ou mot de passe incorrect";
         }
     }
-    return $erreur;
+    return [$erreur];
 }

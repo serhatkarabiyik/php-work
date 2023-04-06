@@ -104,5 +104,5 @@ function login($pdo)
             $erreur = "Erreur : Le mail ou le mot de passe est incorrect";
         }
     }
-    return $erreur;
+    return [$erreur];
 }
