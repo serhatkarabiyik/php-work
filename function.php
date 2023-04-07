@@ -66,44 +66,56 @@ function createEntity($pdo)
 }
 
 // function to register a user
-function register($firstName, $lastName, $email, $password)
+function register($pdo)
 {
     $erreur = null;
-    $user = getUserWithEmail($email);
+    $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
 
-    if (isset($user)) {
-        echo 'Deja';
-        exit;
-    } else {
-        echo 'ok';
-        exit;
+    if ($methode == "POST") {
+        $firstName = filter_input(INPUT_POST, "firstName");
+        $lastName = filter_input(INPUT_POST, "lastName");
+        $email = filter_input(INPUT_POST, "email");
+        $password = filter_input(INPUT_POST, "password");
+        $user = getUser($email, $pdo);
+
+
+        if (isset($user["email"])) {
+            $erreur = "Cette email a déja été utiliser, veuillez choisir une autre email !";
+        } else {
+            if (strlen($password) >= 8) {
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare(
+                    "INSERT INTO user (first_name, last_name, email, password) VALUES(:firstName, :lastName, :email, :pasword)"
+                );
+
+                $stmt->execute([
+                    ":firstName" => $firstName,
+                    ":lastName" => $lastName,
+                    ":email" => $email,
+                    ":pasword" => $hash,
+                ]);
+                header('Location: accueil.php?registered=' . true);
+                exit();
+            } else {
+                $erreur = "Mot de passe trop court ! (8 min)";
+            }
+        }
     }
-
-    // if (strlen($pseudo) >= 8) {
-
-    //     if (strlen($password) >= 8) {
-    //         $hash = password_hash($password, PASSWORD_DEFAULT);
-    //         $data = json_decode(file_get_contents('data.json'), true);
-    //         $user = [
-    //             'pseudo' => $pseudo,
-    //             'password' => $hash,
-    //         ];
-    //         $data[] = $user;
-    //         file_put_contents('data.json', json_encode($data));
-    //         mkdir('./dropbox/' . $pseudo, 0777, true);
-    //         header('Location: connexion.php?registered=' . true);
-    //         exit();
-    //     } else {
-    //         $erreur = "Mot de passe trop court ! (8 min)";
-    //     }
-    // } else {
-    //     $erreur = "Pseudo trop court ! (8 min)";
-    // }
-
     return $erreur;
 }
 
-
-function getUserWithEmail($email)
+function getUser($email, $pdo)
 {
+
+    $stmt = $pdo->prepare(<<<SQL
+        SELECT * from user
+        where email = :email
+    SQL);
+
+    $stmt->execute([
+        ":email" => $email
+    ]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
 }
