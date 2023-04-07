@@ -37,7 +37,7 @@ $page->appendContent(<<<HTML
 
         <div class="action">
             <input type="submit" value="Connexion">
-            <a href="inscription.php">Inscription</a>
+            <a href="index.php">Inscription</a>
         </div>
     </form>
 
