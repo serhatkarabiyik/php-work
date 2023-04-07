@@ -65,44 +65,6 @@ function createEntity($pdo)
     }
 }
 
-// function to register a user
-function register($pdo)
-{
-    $erreur = null;
-    $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
-
-    if ($methode == "POST") {
-        $firstName = filter_input(INPUT_POST, "firstName");
-        $lastName = filter_input(INPUT_POST, "lastName");
-        $email = filter_input(INPUT_POST, "email");
-        $password = filter_input(INPUT_POST, "password");
-        $user = getUser($email, $pdo);
-
-
-        if (isset($user["email"])) {
-            $erreur = "Cette email a déja été utiliser, veuillez choisir une autre email !";
-        } else {
-            if (strlen($password) >= 8) {
-                $hash = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare(
-                    "INSERT INTO user (first_name, last_name, email, password) VALUES(:firstName, :lastName, :email, :pasword)"
-                );
-
-                $stmt->execute([
-                    ":firstName" => $firstName,
-                    ":lastName" => $lastName,
-                    ":email" => $email,
-                    ":pasword" => $hash,
-                ]);
-                header('Location: accueil.php?registered=' . true);
-                exit();
-            } else {
-                $erreur = "Mot de passe trop court ! (8 min)";
-            }
-        }
-    }
-    return $erreur;
-}
 
 function getUser($email, $pdo)
 {
@@ -130,17 +92,23 @@ function login($pdo)
         $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
         $user = getUser($email, $pdo);
         // verfier que l'email existe 
-        if (isset($user["email"])) {
-            $dbPassword = $user["password"];
-            if (password_verify($password, $dbPassword)) {
-                header('Location: acceuil.php?login=' . true);
-                exit();
-            } else {
-                $erreur = "Le mail ou le mot de passe est incorrect !";
-            }
+        if (isset(user["email"])) {
+            $dbPassword = user["password"];
+        }
+        // si oui 
+        // récupère le mot de passe de la base de données
+        // si non 
+        //  erreur
+
+        $dbPassword = "";
+
+        // var_dump()
+        if (password_verify($password, $dbPassword)) {
+            header('Location: pageUser.php');
+            exit();
         } else {
-            $erreur = "Le mail ou le mot de passe est incorrect !";
+            $erreur = "Erreur : nom d'utilisateur ou mot de passe incorrect";
         }
     }
-    return $erreur;
+    return [$erreur];
 }

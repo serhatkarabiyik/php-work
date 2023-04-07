@@ -65,62 +65,8 @@ function createEntity($pdo)
     }
 }
 
-// function to register a user
-function register($pdo)
-{
-    $erreur = null;
-    $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
 
-    if ($methode == "POST") {
-        $firstName = filter_input(INPUT_POST, "firstName");
-        $lastName = filter_input(INPUT_POST, "lastName");
-        $email = filter_input(INPUT_POST, "email");
-        $password = filter_input(INPUT_POST, "password");
-        $user = getUser($email, $pdo);
-
-
-        if (isset($user["email"])) {
-            $erreur = "Cette email a déja été utiliser, veuillez choisir une autre email !";
-        } else {
-            if (strlen($password) >= 8) {
-                $hash = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare(
-                    "INSERT INTO user (first_name, last_name, email, password) VALUES(:firstName, :lastName, :email, :pasword)"
-                );
-
-                $stmt->execute([
-                    ":firstName" => $firstName,
-                    ":lastName" => $lastName,
-                    ":email" => $email,
-                    ":pasword" => $hash,
-                ]);
-                header('Location: accueil.php?registered=' . true);
-                exit();
-            } else {
-                $erreur = "Mot de passe trop court ! (8 min)";
-            }
-        }
-    }
-    return $erreur;
-}
-
-function getUser($email, $pdo)
-{
-
-    $stmt = $pdo->prepare(<<<SQL
-        SELECT * from user
-        where email = :email
-    SQL);
-
-    $stmt->execute([
-        ":email" => $email
-    ]);
-
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result;
-}
-
-function login($pdo)
+function login()
 {
     $erreur = null;
     $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
@@ -128,19 +74,25 @@ function login($pdo)
     if ($methode == "POST") {
         $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS);
         $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
-        $user = getUser($email, $pdo);
+
         // verfier que l'email existe 
-        if (isset($user["email"])) {
-            $dbPassword = $user["password"];
-            if (password_verify($password, $dbPassword)) {
-                header('Location: acceuil.php?login=' . true);
-                exit();
-            } else {
-                $erreur = "Le mail ou le mot de passe est incorrect !";
-            }
+        // si oui 
+        // récupère le mot de passe de la base de données
+        // si non 
+        //  erreur
+
+        $dbPassword = "";
+        $jsonData = file_get_contents("data.json");
+        $data = json_decode($jsonData, true);
+
+
+        // var_dump()
+        if (password_verify($password, $dbPassword)) {
+            header('Location: pageUser.php');
+            exit();
         } else {
-            $erreur = "Le mail ou le mot de passe est incorrect !";
+            $erreur = "Erreur : nom d'utilisateur ou mot de passe incorrect";
         }
     }
-    return $erreur;
+    return [$erreur];
 }

@@ -14,31 +14,19 @@ $erreur = login($pdo);
 
 $page = new WebPage("Connexion");
 
-$page->appendToHead('<link rel="stylesheet" href="style.css">');
-
-if ($erreur) {
-    $page->appendContent(<<<HTML
-    
-    <div class="error-message">{$erreur}</div>
-    
-HTML);
-}
-
+$page->appendToHead('<link rel="stylesheet" href="connexion.css">');
 
 $page->appendContent(<<<HTML
-    
-    <h1>QuickLink</h1>
+
+    <h1>Connexion</h1>
     <form action="" method="POST">
-        <label for="email">Email :</label>
+        <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 
-        <label for="password">Mot de passe :</label>
+        <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
 
-        <div class="action">
-            <input type="submit" value="Connexion">
-            <a href="inscription.php">Inscription</a>
-        </div>
+        <button type="submit">Log In</button>
     </form>
 
 HTML);
