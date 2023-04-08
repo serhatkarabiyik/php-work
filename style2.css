@@ -1,0 +1,36 @@
+.d-flex{
+    display: flex;
+}
+.justify{
+    justify-content: space-between;
+}
+.lien{
+    text-decoration: none;
+    color:black;
+    
+}
+
+.boutton{
+    background-color: blue;
+    padding: 28px;
+    position: relative;
+    right: 20px;
+}
+.body{
+    color:grey;
+}
+
+.bord{
+    background-color: rgb(160, 157, 157);
+    border-collapse: collapse;
+    width: 385px;
+}
+.th{
+    border:1px solid black;
+}
+
+.td{
+    border:1px solid black;
+    text-align: center;
+    padding: 10px;
+}
