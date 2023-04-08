@@ -18,11 +18,20 @@ $page = new WebPage("Acceuil");
 
 $page->appendToHead('<link rel="stylesheet" href="style.css">');
 
+if (filter_input(INPUT_GET, "registered") == 1) {
+    $page->appendContent(<<<HTML
+    <div class="success-message">Inscription réussie !</div>
+HTML);
+} elseif (filter_input(INPUT_GET, "login") == 1) {
+    $page->appendContent(<<<HTML
+    <div class="success-message">Connexion réussie !</div>
+HTML);
+}
 
 $page->appendContent(<<<HTML
 
-    <h1>QuickLien</h1>
-    <p>Bienvenue {$user["first_name"]} {$user["last_name"]} </p>
+    <h1>QuickLink</h1>
+    <h2>Bienvenue {$user["first_name"]} {$user["last_name"]} </h2>
     <form action="" method="POST">
         <label for="lien">Lien :</label>
         <input type="url" id="lien" name="lien" required>

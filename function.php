@@ -138,7 +138,7 @@ function login($pdo)
             $dbPassword = $user["password"];
             if (password_verify($password, $dbPassword)) {
                 $_SESSION["email"] = $email;
-                header('Location: acceuil.php?login=' . true);
+                header('Location: accueil.php?login=' . true);
                 exit();
             } else {
                 $erreur = "Le mail ou le mot de passe est incorrect !";
