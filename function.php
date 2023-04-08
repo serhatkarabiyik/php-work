@@ -68,6 +68,7 @@ function createEntity($pdo)
 // function to register a user
 function register($pdo)
 {
+    session_start();
     $erreur = null;
     $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
 
@@ -94,7 +95,9 @@ function register($pdo)
                     ":email" => $email,
                     ":pasword" => $hash,
                 ]);
+                $_SESSION["email"] = $email;
                 header('Location: accueil.php?registered=' . true);
+
                 exit();
             } else {
                 $erreur = "Mot de passe trop court ! (8 min)";
@@ -122,6 +125,7 @@ function getUser($email, $pdo)
 
 function login($pdo)
 {
+    session_start();
     $erreur = null;
     $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
 
@@ -133,6 +137,7 @@ function login($pdo)
         if (isset($user["email"])) {
             $dbPassword = $user["password"];
             if (password_verify($password, $dbPassword)) {
+                $_SESSION["email"] = $email;
                 header('Location: acceuil.php?login=' . true);
                 exit();
             } else {
@@ -143,4 +148,28 @@ function login($pdo)
         }
     }
     return $erreur;
+}
+
+function cutLink($pdo)
+{
+    $email = $_SESSION["email"];
+
+    $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
+
+    if ($methode == "POST") {
+        $lien = filter_input(INPUT_POST, "lien");
+        $raccourci = filter_input(INPUT_POST, "raccourci");
+
+        $user = getUser($email, $pdo);
+        $stmt = $pdo->prepare(
+            "INSERT INTO url (user_id, url, cut_url) VALUES(:userId, :url, :cut_url)"
+        );
+
+        $stmt->execute([
+            ":userId" => $user["user_id"],
+            ":url" => $lien,
+            ":cut_url" => $raccourci,
+
+        ]);
+    }
 }
