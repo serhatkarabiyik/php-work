@@ -5,7 +5,7 @@ require_once('function.php');
 session_start();
 $email = $_SESSION["email"];
 $pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
-$erreur = cutLink($pdo);
+cutLink($pdo);
 $user = getUser($email, $pdo);
 
 $urls = getUrlsById($pdo, $user["user_id"]);
@@ -25,14 +25,9 @@ HTML);
 HTML);
     $_SESSION['login'] = 0;
 }
+$page->appendJsUrl('<script src="https://kit.fontawesome.com/21e044217e.js" crossorigin="anonymous"></script>');
 
-if ($erreur) {
-    $page->appendContent(<<<HTML
-    
-    <div class="error-message-link">{$erreur}</div>
-    
-HTML);
-}
+$page->appendJsUrl('script.js');
 
 $page->appendContent(<<<HTML
     <a href="deconnexion.php" class="logout">Déconnexion</a>
@@ -71,7 +66,7 @@ foreach ($urls as $url) {
     $active = $url['isActive'] === 1 ? "isActive" : "notActive";
     $page->appendContent(<<<HTML
        <tr class="{$active}">  
-            <td><a href="go.php?url={$url['url']}&id={$url['url_id']}">{$url["cut_url"]}</a></td>
+            <td><a href="go.php?url={$url['url']}&id={$url['url_id']}" target="_blank">{$url["cut_url"]}</a></td>
             <td class="text-align-center">{$url["click"]}</td>
             <td class="text-align-center active pointer">
                 <a href="isActive.php?id={$url['url_id']}"></a>

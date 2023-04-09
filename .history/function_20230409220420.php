@@ -155,7 +155,7 @@ function login($pdo)
 
 function cutLink($pdo)
 {
-    $erreur = null;
+    $erreur = "";
     $email = $_SESSION["email"];
 
     $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
@@ -185,7 +185,6 @@ function cutLink($pdo)
             $erreur = "l'URL existe déjà";
         }
     }
-    return $erreur;
 }
 
 

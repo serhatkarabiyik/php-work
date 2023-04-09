@@ -155,7 +155,6 @@ function login($pdo)
 
 function cutLink($pdo)
 {
-    $erreur = null;
     $email = $_SESSION["email"];
 
     $methode = filter_input(INPUT_SERVER, "REQUEST_METHOD");
@@ -165,29 +164,18 @@ function cutLink($pdo)
         $raccourci = filter_input(INPUT_POST, "raccourci");
 
         $user = getUser($email, $pdo);
+        $stmt = $pdo->prepare(
+            "INSERT INTO url (user_id, url, cut_url) VALUES(:userId, :url, :cut_url)"
+        );
 
-        // Vérifier si l'URL existe déjà
-        $stmt = $pdo->prepare("SELECT * FROM url WHERE url = :url");
-        $stmt->execute([":url" => $lien]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute([
+            ":userId" => $user["user_id"],
+            ":url" => $lien,
+            ":cut_url" => $raccourci,
 
-        if (!$row) { // Si l'URL n'existe pas, alors l'ajouter
-            $stmt = $pdo->prepare(
-                "INSERT INTO url (user_id, url, cut_url) VALUES(:userId, :url, :cut_url)"
-            );
-
-            $stmt->execute([
-                ":userId" => $user["user_id"],
-                ":url" => $lien,
-                ":cut_url" => $raccourci,
-            ]);
-        } else {
-            $erreur = "l'URL existe déjà";
-        }
+        ]);
     }
-    return $erreur;
 }
-
 
 
 function getUrlsById($pdo, $id)

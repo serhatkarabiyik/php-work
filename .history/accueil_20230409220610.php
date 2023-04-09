@@ -29,7 +29,7 @@ HTML);
 if ($erreur) {
     $page->appendContent(<<<HTML
     
-    <div class="error-message-link">{$erreur}</div>
+    <div class="error-message">{$erreur}</div>
     
 HTML);
 }

@@ -223,7 +223,7 @@ tr:hover {
 .error-message-link {
     position: absolute;
     top: 60px;
-    right: 46%;
+    right: 10px;
     background-color: #ffecec;
     border: 1px solid #f5aca6;
     color: #c00;

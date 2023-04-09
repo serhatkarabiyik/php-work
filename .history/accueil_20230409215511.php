@@ -5,7 +5,7 @@ require_once('function.php');
 session_start();
 $email = $_SESSION["email"];
 $pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
-$erreur = cutLink($pdo);
+cutLink($pdo);
 $user = getUser($email, $pdo);
 
 $urls = getUrlsById($pdo, $user["user_id"]);
@@ -24,14 +24,6 @@ HTML);
     <div class="success-message">Connexion réussie !</div>
 HTML);
     $_SESSION['login'] = 0;
-}
-
-if ($erreur) {
-    $page->appendContent(<<<HTML
-    
-    <div class="error-message-link">{$erreur}</div>
-    
-HTML);
 }
 
 $page->appendContent(<<<HTML

@@ -26,14 +26,6 @@ HTML);
     $_SESSION['login'] = 0;
 }
 
-if ($erreur) {
-    $page->appendContent(<<<HTML
-    
-    <div class="error-message-link">{$erreur}</div>
-    
-HTML);
-}
-
 $page->appendContent(<<<HTML
     <a href="deconnexion.php" class="logout">Déconnexion</a>
     <h1>QuickLink</h1>
