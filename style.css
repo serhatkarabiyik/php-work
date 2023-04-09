@@ -1,13 +1,20 @@
+body {
+    overflow: hidden;
+}
+
 h1 {
     margin: 20px auto;
     text-align: center;
     color: #0072C6;
 }
 
-
 h2 {
     color: #0072C6;
     text-transform: capitalize;
+}
+
+a {
+    color: black;
 }
 
 form {
@@ -127,7 +134,6 @@ input[type="submit"]:hover,
     from {
         transform: translateX(0%);
     }
-
     to {
         transform: translateX(110%);
     }
@@ -141,7 +147,7 @@ table {
 }
 
 td {
-    text-align: left;
+    text-align: center;
     padding: 8px;
 }
 
@@ -150,7 +156,6 @@ th {
     color: white;
     text-align: center;
     padding: 8px;
-
 }
 
 .text-align-center {
@@ -163,4 +168,53 @@ tr:nth-child(even) {
 
 tr:hover {
     background-color: #ddd;
+}
+
+.trash a {
+    display: block;
+    border: 1px solid red;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background: url('assets/trash.svg') no-repeat center;
+    margin: auto;
+    padding: 5px;
+}
+
+.active a {
+    display: block;
+    border: 1px solid green;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background: url('assets/pen-solid.svg') no-repeat center;
+    margin: auto;
+    padding: 5px;
+}
+
+.notActive {
+    background: rgba(0, 0, 0, 0.5) !important;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.pointer {
+    pointer-events: visible !important;
+}
+
+.logout {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #0072C6;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.logout:hover {
+    background-color: #1E90FF;
 }

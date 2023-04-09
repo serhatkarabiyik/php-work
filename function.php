@@ -96,7 +96,9 @@ function register($pdo)
                     ":pasword" => $hash,
                 ]);
                 $_SESSION["email"] = $email;
-                header('Location: accueil.php?registered=' . true);
+                $_SESSION["login"] = 1;
+
+                header('Location: accueil.php');
 
                 exit();
             } else {
@@ -138,7 +140,8 @@ function login($pdo)
             $dbPassword = $user["password"];
             if (password_verify($password, $dbPassword)) {
                 $_SESSION["email"] = $email;
-                header('Location: accueil.php?login=' . true);
+                $_SESSION["login"] = 1;
+                header('Location: accueil.php');
                 exit();
             } else {
                 $erreur = "Le mail ou le mot de passe est incorrect !";
@@ -191,8 +194,23 @@ function getUrlsById($pdo, $id)
     return $result;
 }
 
-$pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
-function deleteUrlById(PDO $pdo, $id)
+function getUrls($pdo, $id)
+{
+
+    $stmt = $pdo->prepare(<<<SQL
+    SELECT * from url
+    where url_id = :id
+    SQL);
+
+    $stmt->execute([
+        ":id" => $id
+    ]);
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function deleteUrlById($pdo, $id)
 {
 
     $stmt = $pdo->prepare(<<<SQL
@@ -201,6 +219,42 @@ function deleteUrlById(PDO $pdo, $id)
     SQL);
 
     $stmt->execute([
+        ":id" => $id
+    ]);
+}
+
+
+function setIsActive($pdo, $id)
+{
+
+    $url = getUrls($pdo, $id);
+    $isActive = $url['isActive'] === 1 ? 0 : 1;
+    $stmt = $pdo->prepare(<<<SQL
+    UPDATE url
+    SET isActive = :isActive
+    where url_id = :id
+    SQL);
+
+
+    $stmt->execute([
+        ":isActive" => $isActive,
+        ":id" => $id
+    ]);
+}
+
+function setClick($pdo, $id)
+{
+
+    $url = getUrls($pdo, $id);
+    $clic = $url['click'] + 1;
+    $stmt = $pdo->prepare(<<<SQL
+    UPDATE url
+    SET click = :clic
+    where url_id = :id
+    SQL);
+
+    $stmt->execute([
+        ":clic" => $clic,
         ":id" => $id
     ]);
 }

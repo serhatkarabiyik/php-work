@@ -1,9 +1,4 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once('WebPage.php');
 require_once('function.php');
 
@@ -19,18 +14,23 @@ $page = new WebPage("Acceuil");
 
 $page->appendToHead('<link rel="stylesheet" href="style.css">');
 
-if (filter_input(INPUT_GET, "registered") == 1) {
+if ($_SESSION['registered'] == 1) {
     $page->appendContent(<<<HTML
     <div class="success-message">Inscription réussie !</div>
 HTML);
-} elseif (filter_input(INPUT_GET, "login") == 1) {
+    $_SESSION['registered'] = 0;
+} elseif ($_SESSION['login'] == 1) {
     $page->appendContent(<<<HTML
     <div class="success-message">Connexion réussie !</div>
 HTML);
+    $_SESSION['login'] = 0;
 }
+$page->appendJsUrl('<script src="https://kit.fontawesome.com/21e044217e.js" crossorigin="anonymous"></script>');
+
+$page->appendJsUrl('script.js');
 
 $page->appendContent(<<<HTML
-
+    <a href="deconnexion.php" class="logout">Déconnexion</a>
     <h1>QuickLink</h1>
     <h2>Bienvenue {$user["first_name"]} {$user["last_name"]} </h2>
     <form action="" method="POST" class="raccourci">
@@ -63,12 +63,17 @@ $page->appendContent(<<<HTML
 HTML);
 
 foreach ($urls as $url) {
+    $active = $url['isActive'] === 1 ? "isActive" : "notActive";
     $page->appendContent(<<<HTML
-       <tr>  
-            <td><a href="{$url['url']}" target="_blank">{$url["cut_url"]}</a></td>
-            <td class = "text-align-center">{$url["click"]}</td>
-            <td class = "text-align-center">{$url["isActive"]}</td>
-            <td class = "text-align-center" > <button onclick="deleteUrlById({$url['url_id']})">Delete</button></td>
+       <tr class="{$active}">  
+            <td><a href="go.php?url={$url['url']}&id={$url['url_id']}" target="_blank">{$url["cut_url"]}</a></td>
+            <td class="text-align-center">{$url["click"]}</td>
+            <td class="text-align-center active pointer">
+                <a href="isActive.php?id={$url['url_id']}"></a>
+            </td>
+            <td class="text-align-center trash pointer">
+                <a href="delete.php?id={$url['url_id']}"></a>
+            </td>
        </tr>
 
 HTML);
@@ -81,3 +86,4 @@ HTML);
 
 
 echo $page->toHTML();
+// <button onclick="deleteUrlById({$url['url_id']})">Delete</button>
