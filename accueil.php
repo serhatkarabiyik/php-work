@@ -32,17 +32,35 @@ $page->appendContent(<<<HTML
 
     <h1>QuickLink</h1>
     <h2>Bienvenue {$user["first_name"]} {$user["last_name"]} </h2>
-    <form action="" method="POST">
-        <label for="lien">Lien :</label>
-        <input type="url" id="lien" name="lien" required>
-
-        <label for="raccourci">Raccourci :</label>
-        <input type="text" id="raccourci" name="raccourci" required>
+    <form action="" method="POST" class="raccourci">
+        <div>
+            <label for="lien">Lien :</label>
+            <input type="url" id="lien" name="lien" required>
+        </div>
+       
+        <div>
+            <label for="raccourci">Raccourci :</label>
+            <input type="text" id="raccourci" name="raccourci" required>
+        </div>
+        
 
         <div class="action">
             <input type="submit" value="Raccourcir">
         </div>
     </form>
+
+    <table>
+      <thead> 
+        <tr>
+          <th>Site</th>
+          <th>Clics</th>
+          <th>Action</th>
+        </tr>
+       </thead>
+       <tbody>
+        
+       </tbody> 
+    </table>
 
 HTML);
 
