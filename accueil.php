@@ -11,8 +11,9 @@ session_start();
 $email = $_SESSION["email"];
 $pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
 cutLink($pdo);
-
 $user = getUser($email, $pdo);
+
+$urls = getUrlsById($pdo, $user["user_id"]);
 
 $page = new WebPage("Acceuil");
 
@@ -54,14 +55,29 @@ $page->appendContent(<<<HTML
         <tr>
           <th>Site</th>
           <th>Clics</th>
-          <th>Action</th>
+          <th colspan=2 >Action</th>
         </tr>
        </thead>
        <tbody>
-        
-       </tbody> 
+
+HTML);
+
+foreach ($urls as $url) {
+    $page->appendContent(<<<HTML
+       <tr>  
+            <td><a href="{$url['url']}" target="_blank">{$url["cut_url"]}</a></td>
+            <td class = "text-align-center">{$url["click"]}</td>
+            <td class = "text-align-center">{$url["isActive"]}</td>
+            <td class = "text-align-center" > <button onclick="deleteUrlById({$url['url_id']})">Delete</button></td>
+       </tr>
+
+HTML);
+}
+$page->appendContent(<<<HTML
+           </tbody> 
     </table>
 
 HTML);
+
 
 echo $page->toHTML();

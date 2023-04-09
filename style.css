@@ -4,6 +4,7 @@ h1 {
     color: #0072C6;
 }
 
+
 h2 {
     color: #0072C6;
     text-transform: capitalize;
@@ -126,6 +127,7 @@ input[type="submit"]:hover,
     from {
         transform: translateX(0%);
     }
+
     to {
         transform: translateX(110%);
     }
@@ -138,7 +140,6 @@ table {
     text-align: center;
 }
 
-th,
 td {
     text-align: left;
     padding: 8px;
@@ -147,6 +148,13 @@ td {
 th {
     background-color: #4285F4;
     color: white;
+    text-align: center;
+    padding: 8px;
+
+}
+
+.text-align-center {
+    text-align: center;
 }
 
 tr:nth-child(even) {

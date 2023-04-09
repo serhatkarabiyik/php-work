@@ -173,3 +173,34 @@ function cutLink($pdo)
         ]);
     }
 }
+
+
+function getUrlsById($pdo, $id)
+{
+
+    $stmt = $pdo->prepare(<<<SQL
+    SELECT * from url
+    where user_id = :id
+    SQL);
+
+    $stmt->execute([
+        ":id" => $id
+    ]);
+
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+$pdo = dataBase('mysql', 'localhost', 3306, 'root', 'root', 'work');
+function deleteUrlById(PDO $pdo, $id)
+{
+
+    $stmt = $pdo->prepare(<<<SQL
+    DELETE FROM url
+    where url_id = :id
+    SQL);
+
+    $stmt->execute([
+        ":id" => $id
+    ]);
+}
